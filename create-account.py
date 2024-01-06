@@ -58,7 +58,7 @@ class Scrappey:
 
 
 
-def create_account(email, api_key, output_file):
+def create_account(email, api_key, output_file=None, id=1, total_accounts=1):
     error_count = 0
 
     email_parts = email.split('@')
@@ -90,7 +90,7 @@ def create_account(email, api_key, output_file):
         'create-submit': 'create'
     }
 
-    print(f'Attempting to register account "{reg_email}" with password {reg_pw}')
+    print(f'[{id}/{total_accounts}] Attempting to register account "{reg_email}" with password {reg_pw}')
     
     while error_count < 3:
         try:
@@ -98,7 +98,7 @@ def create_account(email, api_key, output_file):
             reg_resp = scrappey.post(REG_URL, post_data={**registration_data, **{'csrf_token': csrf_token}})
 
             if 'You can now begin your adventure with your new account.' in reg_resp['solution']['response']:
-                print(f'Registered account "{reg_email}" with password {reg_pw}')
+                print(f'[{id}/{total_accounts}] Registered account "{reg_email}" with password {reg_pw}')
                 if output_file:
                     date = datetime.today().date()
                     f = open(output_file, 'a')
@@ -109,9 +109,9 @@ def create_account(email, api_key, output_file):
             pass
         
         error_count = error_count + 1
-        print(f'Error while registering account "{reg_email}" with password {reg_pw} ({error_count}/3)')
+        print(f'[{id}/{total_accounts}] Error while registering account "{reg_email}" with password {reg_pw} ({error_count}/3)')
         
-    print(f'Failed three times when registering account "{reg_email}" with password {reg_pw} - skipping.')
+    print(f'[{id}/{total_accounts}] Failed three times when registering account "{reg_email}" with password {reg_pw} - skipping.')
         
 
 def main():
@@ -128,7 +128,8 @@ def main():
             f.write('email,password,dob,date_registered,ip_address')
             f.close()
 
-    create_account(args.e, args.k, output_file=args.o)
+    for n in range(args.n):
+        create_account(args.e, args.k, output_file=args.o, id=n+1, total_accounts=args.n)
 
 if __name__ == "__main__":
     main()
