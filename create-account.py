@@ -10,7 +10,7 @@ from calendar import monthrange
 from datetime import datetime
 
 REG_URL = 'https://secure.runescape.com/m=account-creation/create_account?theme=oldschool'
-PW_CHARS = string.ascii_letters + string.digits + '!"$%^*().#<>\''
+PW_CHARS = string.ascii_letters + string.digits
 
 class Scrappey:
     def __init__(self, api_key, session=str(uuid.uuid4)):
