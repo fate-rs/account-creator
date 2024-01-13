@@ -125,7 +125,7 @@ def main():
     if args.o:
         if not Path(args.o).is_file():
             f = open(args.o, 'w')
-            f.write('email,password,dob,date_registered,ip_address')
+            f.write('email,password,dob,date_registered')
             f.close()
 
     for n in range(args.n):
